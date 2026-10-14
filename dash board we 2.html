@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Telecom Egypt (WE) | Interactive Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--pink:#AC0574;--purple:#3E0248;--purple2:#5b1264;--pale:#FAEFF8;--pale2:#F4DDF0;--white:#fff;--ink:#35103c;--muted:#816b83;--line:#ebd6e8}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:18px}body{margin:0;background:#f7edf6;color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100vh}
+.sidebar{background:linear-gradient(180deg,#3E0248,#26002f);color:white;padding:22px 13px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:24px}
+.brand{display:flex;align-items:center;gap:10px;padding:3px 7px 22px;border-bottom:1px solid #ffffff2a}.brand-mark{width:43px;height:43px;border-radius:14px;background:linear-gradient(135deg,#f1a3dc,#AC0574);display:grid;place-items:center;font-size:23px;font-weight:900;color:#fff}.brand strong{display:block;font-size:22px;letter-spacing:1px}.brand small{font-size:9px;letter-spacing:1px;opacity:.8}
+nav{display:grid;gap:8px}nav button{width:100%;text-align:left;display:flex;align-items:center;gap:12px;border:0;border-radius:10px;padding:13px 12px;background:transparent;color:#f3dff0;font-size:14px;font-weight:650;cursor:pointer}nav button .ico{width:22px;text-align:center;font-size:18px;color:#e879c2}nav button:hover,nav button.active{background:linear-gradient(100deg,var(--pink),#87045f);color:white;box-shadow:0 6px 16px #ac057444}.side-bottom{margin-top:auto;color:#df78c5;font-weight:750;line-height:1.45;padding:12px}
+main{min-width:0}.topbar{padding:19px 28px;display:flex;align-items:center;justify-content:space-between;gap:15px;background:linear-gradient(100deg,#fff9fe,#f4d9ee);border-bottom:1px solid #efd6e9}.topbar h1{font-size:26px;margin:0 0 4px;color:var(--purple)}.topbar p{margin:0;font-size:14px;font-weight:600}.top-tag{text-align:right;font-size:13px;font-weight:650;color:var(--purple)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;justify-content:flex-end}.btn{border:0;border-radius:9px;padding:9px 12px;font-weight:700;cursor:pointer;background:var(--pink);color:white}.btn.secondary{background:var(--purple)}.content{padding:20px;display:grid;gap:18px;max-width:1700px;margin:auto}
+.section{scroll-margin-top:20px}.section-head{background:linear-gradient(100deg,var(--purple),var(--pink));color:#fff;border-radius:13px 13px 0 0;padding:14px 19px;display:flex;align-items:center;justify-content:space-between;gap:12px}.section-head h2{margin:0;font-size:21px}.section-head small{font-size:12px;opacity:.9}.section-body{background:#fff9fe;border:1px solid var(--line);border-top:0;border-radius:0 0 13px 13px;padding:13px}
+.overview-grid{display:grid;grid-template-columns: minmax(175px,1fr) repeat(4,minmax(145px,1fr));gap:10px}.city-card{border-radius:12px;min-height:250px;background:linear-gradient(150deg,#64126b,#ac0574 60%,#3e0248);color:white;padding:19px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative}.city-card:after{content:"WE";font-weight:900;font-size:76px;letter-spacing:-6px;opacity:.12;position:absolute;right:-5px;bottom:22px}.city-card .we-logo{font-size:37px;font-weight:900;letter-spacing:2px}.city-card p{font-size:13px;line-height:1.5;max-width:200px;z-index:1}.mini-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.info-card{background:linear-gradient(145deg,#fff,#f8e8f5);border:1px solid #f0d7eb;border-radius:12px;padding:14px;min-width:0}.info-title{display:flex;align-items:center;gap:8px;color:var(--pink);font-size:13px;font-weight:800;margin-bottom:10px}.info-title span{font-size:19px}.info-card p,.info-card li{font-size:12px;line-height:1.55;margin:5px 0}.info-card ul{padding-left:16px;margin:5px 0}.info-card strong{color:var(--purple)}.financial-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.metric{background:linear-gradient(150deg,#fff,#f9e8f5);border:1px solid #f0d7eb;border-radius:13px;padding:14px;min-width:0}.metric .mhead{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:750}.metric .bubble{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;background:var(--pink);color:#fff;border-radius:50%;font-size:16px}.metric .number{font-size:25px;font-weight:900;color:var(--pink);margin:10px 0 3px}.metric .desc{font-size:10px;color:var(--muted);line-height:1.4}
+.charts-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.chart-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px;min-width:0}.chart-card h3{font-size:14px;margin:0 0 5px;color:var(--purple)}.chart-card p{font-size:11px;color:var(--muted);margin:0 0 10px;line-height:1.4}.canvas-wrap{height:230px;position:relative}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa{background:linear-gradient(145deg,#fff,#f8e9f5);border:1px solid var(--line);border-radius:12px;padding:15px}.qa .qtag{color:var(--pink);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.5px}.qa h3{font-size:14px;margin:8px 0}.qa p{font-size:12px;line-height:1.6;margin:0;color:#5a4560}.searchbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.searchbar input{flex:1;min-width:180px;padding:11px 13px;border:1px solid var(--line);border-radius:9px;font-size:13px}.searchbar button{border:0;border-radius:9px;padding:10px 13px;background:var(--pale2);color:var(--purple);font-weight:750;cursor:pointer}.note-box{background:#fff0fa;border-left:4px solid var(--pink);padding:12px;border-radius:8px;font-size:11px;line-height:1.5;color:#684e6c}.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px;background:#f3d8ed;border-radius:12px;font-size:11px;color:var(--purple);font-weight:650}
+#toast{display:none;position:fixed;right:18px;bottom:18px;background:var(--purple);color:#fff;padding:12px 16px;border-radius:10px;z-index:50;box-shadow:0 8px 28px #3e024844}
+@media(max-width:1200px){.overview-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.city-card{grid-column:span 2;min-height:170px}.financial-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.charts-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.layout{display:block}.sidebar{position:relative;height:auto;padding:12px;gap:12px}.brand{padding-bottom:12px}.sidebar nav{grid-template-columns:repeat(2,minmax(0,1fr))}.side-bottom{display:none}.topbar{padding:16px;align-items:flex-start}.topbar h1{font-size:21px}.top-tag{display:none}.content{padding:12px}.overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.city-card{grid-column:span 2}.financial-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.charts-grid,.qa-grid{grid-template-columns:1fr}.section-head h2{font-size:17px}.section-head small{display:none}.canvas-wrap{height:250px}}
+@media print{body{background:white}.layout{display:block}.sidebar,.actions,.searchbar{display:none!important}.topbar{padding:10px 0}.content{padding:0;gap:10px}.section,.chart-card,.metric,.info-card,.qa{break-inside:avoid}.section-head{print-color-adjust:exact;-webkit-print-color-adjust:exact}.section-body{padding:8px}.canvas-wrap{height:180px}.footer{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">W</div><div><strong>we</strong><small>TELECOM EGYPT</small></div></div>
+  <nav>
+    <button class="" onclick="go('overview',this)"><span class="ico">⌂</span> Overview</button>
+    <button onclick="go('financial',this)" class=""><span class="ico">▥</span> Financial Analysis</button>
+    <button onclick="go('charts',this)" class=""><span class="ico">↗</span> Charts</button>
+    <button onclick="go('questions',this)" class=""><span class="ico">ⓘ</span> Financial Q&amp;A</button>
+    <button onclick="go('about',this)" class="active"><span class="ico">◎</span> About WE</button>
+  </nav>
+  <div class="side-bottom">Together<br>We Connect<br>More</div>
+</aside>
+<main>
+<header class="topbar">
+  <div><h1>Telecom Egypt (WE)</h1><p>Company Overview &amp; Financial Dashboard</p></div>
+  <div class="top-tag">A leading digital services provider<br>in Egypt and the region<div class="actions"><button class="btn" onclick="window.print()">▣ Print / Save PDF</button><button class="btn secondary" onclick="downloadHTML()">↓ Export HTML</button></div></div>
+</header>
+<div class="content">
+<section id="overview" class="section">
+  <div class="section-head"><h2>▦ &nbsp; Company Overview</h2><small>From a national operator to a digital future</small></div>
+  <div class="section-body">
+    <div class="overview-grid">
+      <div class="city-card"><div><div class="we-logo">WE</div><div style="font-size:10px;letter-spacing:2px">TELECOM EGYPT</div></div><p>Connecting people, businesses and communities through communications technology.</p></div>
+      <div class="mini-grid" style="grid-column:span 4">
+        <article class="info-card"><div class="info-title"><span>▥</span> Company Name &amp; Type</div><p><strong>Telecom Egypt (WE)</strong></p><p>Public joint-stock telecommunications company listed on the Egyptian Exchange (EGX: ETEL).</p></article>
+        <article class="info-card"><div class="info-title"><span>◷</span> History</div><p>Egypt’s telecommunications history dates to <strong>1854</strong>. Telecom Egypt was established in its modern corporate form in <strong>1998</strong>; the WE brand launched in <strong>2017</strong>.</p></article>
+        <article class="info-card"><div class="info-title"><span>⌖</span> Headquarters</div><p><strong>Cairo / Smart Village, Giza, Egypt</strong></p><p>Smart Village is a major corporate location.</p></article>
+        <article class="info-card"><div class="info-title"><span>⚙</span> Main Business Activities</div><ul><li>Mobile services</li><li>Fixed-line &amp; broadband</li><li>Digital services &amp; ICT solutions</li><li>Wholesale and international connectivity</li><li>Cloud, data centers &amp; infrastructure</li></ul></article>
+        <article class="info-card"><div class="info-title"><span>♟</span> Competitors</div><ul><li>Vodafone Egypt</li><li>Orange Egypt</li><li>e&amp; Egypt (Etisalat Misr)</li></ul><p>Competition varies by service segment.</p></article>
+        <article class="info-card"><div class="info-title"><span>◴</span> Ownership</div><p>The Egyptian state is the <strong>majority shareholder</strong>.</p><p>Free float and exact ownership percentages should be checked against the latest investor-relations disclosure.</p><p>Telecom Egypt also owns a significant stake in Vodafone Egypt.</p></article>
+        <article class="info-card"><div class="info-title"><span>↗</span> Recent Developments / Issues</div><ul><li>Network expansion and digital transformation</li><li>5G rollout and investment</li><li>Growing market competition</li><li>Foreign-exchange exposure and borrowing costs</li></ul></article>
+        <article class="info-card"><div class="info-title"><span>◎</span> Mission / Vision</div><p><strong>Mission focus</strong><br>Enriching people’s lives through technology.</p><p><strong>Vision focus</strong><br>Be a leading digital services provider in Egypt and the region.</p><p class="desc">Paraphrased; verify exact wording in official company material.</p></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="financial" class="section">
+  <div class="section-head"><h2>▥ &nbsp; Financial Dashboard</h2><small>Key financial indicators • 2021–2025</small></div>
+  <div class="section-body">
+    <div class="financial-grid">
+      <article class="metric"><div class="mhead"><span class="bubble">◉</span> Gross Margin</div><div class="number">43.5%</div><div class="desc">2025 • source dashboard series</div></article>
+      <article class="metric"><div class="mhead"><span class="bubble">↗</span> EBITDA Margin</div><div class="number">52.8%</div><div class="desc">2025 • before FX adjustment</div></article>
+      <article class="metric"><div class="mhead"><span class="bubble">％</span> EBITDA excl. FX</div><div class="number">54.1%</div><div class="desc">2025 • as stated in project notes</div></article>
+      <article class="metric"><div class="mhead"><span class="bubble">▤</span> Current Ratio</div><div class="number">0.49×</div><div class="desc">2025 • below 1.0 indicates liquidity pressure</div></article>
+      <article class="metric"><div class="mhead"><span class="bubble">◎</span> ROE</div><div class="number">63.6%</div><div class="desc">2025 • from supplied project dashboard</div></article>
+      <article class="metric"><div class="mhead"><span class="bubble">⌁</span> ROA</div><div class="number">12.1%</div><div class="desc">2025 • from supplied project dashboard</div></article>
+    </div>
+    <div class="note-box" style="margin-top:12px"><strong>Academic data note:</strong> The financial values and trend series here were carried over from the dashboard/project material provided in this conversation. Please verify each value against Telecom Egypt’s official annual reports before final submission. ROE/ROA figures are shown as stated in the supplied material.</div>
+  </div>
+</section>
+
+<section id="charts" class="section">
+  <div class="section-head"><h2>▥ &nbsp; Charts &amp; Trends</h2><small>Interactive charts • hover for values</small></div>
+  <div class="section-body">
+    <div class="charts-grid">
+      <article class="chart-card"><h3>Profitability Margins Trend</h3><p>Gross margin and EBITDA margin, 2021–2025.</p><div class="canvas-wrap"><canvas id="marginChart" width="298" height="230" style="display: block; box-sizing: border-box; height: 230px; width: 298.3px;"></canvas></div></article>
+      <article class="chart-card"><h3>Liquidity Ratios</h3><p>Current and quick ratios remain below 1.0 in the provided series.</p><div class="canvas-wrap"><canvas id="liquidityChart" width="298" height="230" style="display: block; box-sizing: border-box; height: 230px; width: 298.3px;"></canvas></div></article>
+      <article class="chart-card"><h3>ROE vs ROA (2025)</h3><p>High ROE relative to ROA can indicate the amplifying effect of leverage.</p><div class="canvas-wrap"><canvas id="returnChart" width="298" height="230" style="display: block; box-sizing: border-box; height: 230px; width: 298.3px;"></canvas></div></article>
+      <article class="chart-card"><h3>Borrowings Growth</h3><p>Project notes indicate borrowings increased by approximately 4.4× across the period.</p><div class="canvas-wrap"><canvas id="debtChart" width="298" height="230" style="display: block; box-sizing: border-box; height: 230px; width: 298.3px;"></canvas></div></article>
+      <article class="chart-card"><h3>Asset Structure</h3><p>Property and equipment represent approximately half of total assets, according to the project notes.</p><div class="canvas-wrap"><canvas id="assetChart" width="298" height="230" style="display: block; box-sizing: border-box; height: 230px; width: 298.3px;"></canvas></div></article>
+      <article class="chart-card"><h3>Revenue / Profit Context</h3><p>Revenue increased over the period, while net profit was affected by FX losses and other factors.</p><div class="canvas-wrap"><canvas id="contextChart" width="298" height="230" style="display: block; box-sizing: border-box; height: 230px; width: 298.3px;"></canvas></div></article>
+    </div>
+  </div>
+</section>
+
+<section id="questions" class="section">
+  <div class="section-head"><h2>ⓘ &nbsp; Financial Q&amp;A Analysis</h2><small>Key interpretations for the graduation project</small></div>
+  <div class="section-body">
+    <div class="searchbar"><input id="search" type="search" placeholder="Search a topic: FX, ROE, liquidity, debt, revenue..." oninput="filterQA(this.value)"><button onclick="document.getElementById('search').value='';filterQA('')">Show all</button></div>
+    <div class="qa-grid" id="qaGrid">
+      <article class="qa" data-terms="revenue profit fx exchange currency Q1 Q2 Q3"><div class="qtag">Q1–Q3 • Income &amp; FX</div><h3>Did revenue growth translate into profit?</h3><p>Revenue grew over the period, but net profit fluctuated due to foreign-currency debt and exchange-rate effects. The supplied project notes cite EGP 19.7bn in finance losses in 2024 and a stronger 2025 profit contribution from Vodafone Egypt.</p></article>
+      <article class="qa" data-terms="debt leverage assets property equipment Q4 Q5 Q6"><div class="qtag">Q4–Q6 • Balance sheet</div><h3>Leverage and asset structure</h3><p>Borrowings grew approximately 4.4× while equity changed relatively little. Property and equipment account for about 50% of assets, reflecting the capital-intensive nature of telecommunications networks.</p></article>
+      <article class="qa" data-terms="liquidity current quick ratio Q7"><div class="qtag">Liquidity • Q7</div><h3>What do liquidity ratios show?</h3><p>Current and quick ratios below 1.0 suggest current liabilities exceed current assets and the company may face short-term liquidity pressure. Interpret this alongside operating cash flow and debt maturities.</p></article>
+      <article class="qa" data-terms="roe roa return equity assets leverage Q8 Q9 Q10 Q11 Q12"><div class="qtag">Q8–Q12 • Returns</div><h3>Why can ROE be much higher than ROA?</h3><p>ROE measures profit relative to shareholders’ equity; ROA measures profit relative to total assets. Debt-financed assets can magnify ROE, but also increase financial risk. A high ROE alone does not prove stronger operating performance.</p></article>
+      <article class="qa" data-terms="ebitda fx foreign exchange Q13"><div class="qtag">Q13 • EBITDA &amp; FX</div><h3>How does FX affect reported EBITDA?</h3><p>Foreign-exchange effects can materially affect reported results, depending on where gains and losses are classified. Compare reported EBITDA with EBITDA excluding FX and check the company’s exact reconciliation in its annual report.</p></article>
+      <article class="qa" data-terms="gross margin ebitda margin ebit net profit margin profitability"><div class="qtag">Profitability</div><h3>Which margin improved the most?</h3><p>Compare each margin’s 2021 and 2025 percentage-point change using the final verified table. The trend chart currently plots the source-provided gross and EBITDA margin series.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section">
+  <div class="section-head"><h2>◎ &nbsp; About WE</h2><small>Company profile summary</small></div>
+  <div class="section-body"><div class="qa-grid">
+    <article class="info-card"><div class="info-title"><span>▦</span> Connectivity</div><p>Fixed-line, mobile, broadband and wholesale connectivity services support consumers and businesses.</p></article>
+    <article class="info-card"><div class="info-title"><span>✦</span> Digital transformation</div><p>Digital services, ICT solutions and infrastructure are important parts of the company’s development strategy.</p></article>
+    <article class="info-card"><div class="info-title"><span>⚠</span> Key risks to monitor</div><p>Foreign-exchange exposure, borrowing costs, liquidity, capital expenditure and competitive pressure.</p></article>
+  </div></div>
+</section>
+
+<div class="footer"><span>Telecom Egypt (WE) • Company &amp; Financial Dashboard</span><span>Colors: #AC0574 · #3E0248</span><span>Team4</span></div>
+</div>
+</main>
+</div>
+<div id="toast"></div>
+<script>
+const years=['2021','2022','2023','2024','2025'];
+const pink='#AC0574',purple='#3E0248',pink2='#D65AA6',pale='#EBC8E4',text='#6D5870',grid='#F0DFED';
+const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:text,boxWidth:10,font:{size:10}}}},scales:{x:{ticks:{color:text,font:{size:10}},grid:{display:false}},y:{ticks:{color:text,font:{size:10}},grid:{color:grid}}}};
+new Chart(document.getElementById('marginChart'),{type:'line',data:{labels:years,datasets:[
+{label:'Gross Margin (%)',data:[40.4,39.0,38.5,37.9,43.5],borderColor:pink,backgroundColor:'#AC057418',fill:true,tension:.32},
+{label:'EBITDA Margin (%)',data:[46.4,32.1,40.2,38.9,52.8],borderColor:purple,backgroundColor:'transparent',tension:.32}
+]},options:base});
+new Chart(document.getElementById('liquidityChart'),{type:'bar',data:{labels:years,datasets:[
+{label:'Current Ratio',data:[.61,.52,.48,.42,.49],backgroundColor:pink,borderRadius:5},
+{label:'Quick Ratio',data:[.52,.44,.40,.35,.41],backgroundColor:purple,borderRadius:5}
+]},options:{...base,scales:{...base.scales,y:{...base.scales.y,min:0,max:1}}}});
+new Chart(document.getElementById('returnChart'),{type:'bar',data:{labels:['2025'],datasets:[
+{label:'ROE',data:[63.6],backgroundColor:pink,borderRadius:5},
+{label:'ROA',data:[12.1],backgroundColor:purple,borderRadius:5}
+]},options:base});
+new Chart(document.getElementById('debtChart'),{type:'bar',data:{labels:['Start of period','End of period'],datasets:[{label:'Borrowings (index)',data:[1,4.4],backgroundColor:[pale,pink],borderRadius:7}]},options:{...base,plugins:{...base.plugins,legend:{display:false}}}});
+new Chart(document.getElementById('assetChart'),{type:'doughnut',data:{labels:['Property & equipment','Other assets'],datasets:[{data:[50,50],backgroundColor:[pink,purple],borderColor:'#fff',borderWidth:3}]},options:{...base,scales:{}}});
+new Chart(document.getElementById('contextChart'),{type:'line',data:{labels:years,datasets:[
+{label:'Revenue trend (directional)',data:[1,1.1,1.2,1.35,1.5],borderColor:pink,tension:.3},
+{label:'Net profit (fluctuating)',data:[1,.65,.95,.35,1.25],borderColor:purple,tension:.3}
+]},options:{...base,scales:{y:{...base.scales.y,ticks:{display:false}}}}});
+function go(id,btn){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function filterQA(q){q=q.toLowerCase().trim();document.querySelectorAll('#qaGrid .qa').forEach(card=>{const content=(card.innerText+' '+card.dataset.terms).toLowerCase();card.style.display=(!q||content.includes(q))?'':'none'})}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2800)}
+function downloadHTML(){const clone=document.documentElement.cloneNode(true);const blob=new Blob(['<!doctype html>\n'+clone.outerHTML],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='WE_Interactive_Dashboard.html';a.click();URL.revokeObjectURL(url);toast('HTML export started. Check your Downloads folder.')}
+</script>
+</body></html>
